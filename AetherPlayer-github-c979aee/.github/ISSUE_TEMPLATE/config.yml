@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/superuser404notfound/AetherPlayer/security/advisories/new
+    about: Please report security issues privately through GitHub Security Advisories, not as a public issue.
+  - name: Playback / decoding bug (engine-level)
+    url: https://github.com/superuser404notfound/AetherEngine/issues
+    about: If a file decodes or plays wrong regardless of the app shell (codec, container, HDR, Dolby Vision, audio routing), it is an engine bug and is fixed in AetherEngine. Report it there. When in doubt, the backend badge helps — see the bug report form.

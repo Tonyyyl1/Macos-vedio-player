@@ -1,0 +1,93 @@
+name: Bug report
+description: A bug in the AetherPlayer macOS app
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. AetherPlayer is the macOS app shell around the AetherEngine playback engine. If a file decodes or plays wrong no matter what the app does (wrong colors, no audio, a codec that will not open, HDR or Dolby Vision issues), that is usually an engine bug and belongs on the [AetherEngine tracker](https://github.com/superuser404notfound/AetherEngine/issues). Bugs in the window, controls, track menus, scrubbing, snapshots, or keyboard handling belong here. The on-screen `native` / `sw` backend badge tells you which rendering path a session took, which helps a lot in deciding where a bug lives.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what did the app do instead?
+      placeholder: |
+        I dropped an MKV onto the window and pressed Space. I expected it to play.
+        Instead the controls appeared but the video surface stayed black.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: The exact sequence of actions. A sample file, or a link to one, makes everything faster.
+      placeholder: |
+        1. Open AetherPlayer
+        2. Drag any 4K HDR MKV onto the window
+        3. Press Space to play
+        4. Open the audio track menu
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: AetherPlayer version
+      description: AetherPlayer → About AetherPlayer (e.g. `0.3.1 (4)`)
+      placeholder: "0.3.1 (4)"
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: macOS version
+      description: Apple menu → About This Mac
+      placeholder: "macOS 15.1"
+    validations:
+      required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Mac model / chip
+      placeholder: "MacBook Pro M1 Pro / Mac mini (Intel)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: backend-badge
+    attributes:
+      label: Backend badge
+      description: The badge shown over the video surface. It attributes the rendering path. Pick "Not sure / not a playback bug" if it does not apply.
+      options:
+        - native
+        - sw
+        - Not sure / not a playback bug
+    validations:
+      required: true
+
+  - type: textarea
+    id: media
+    attributes:
+      label: Source media (for playback bugs)
+      description: Container / video codec + profile / audio codec / resolution / HDR or Dolby Vision profile. `ffprobe` output is ideal.
+      placeholder: "MKV, HEVC Main 10, Dolby Vision Profile 8.1, 3840x2160, EAC3+JOC 5.1"
+
+  - type: textarea
+    id: errors
+    attributes:
+      label: Error codes / log lines
+      description: Any AVFoundation / CoreMedia / VideoToolbox codes, or WARNING and error lines from Console.app filtered to AetherPlayer.
+      placeholder: |
+        CoreMediaErrorDomain -12860
+        AVPlayer status .failed, error -11829
+      render: text
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Logs, a sample file, screenshots, hunches, related issues. Screenshots are very welcome for UI bugs.

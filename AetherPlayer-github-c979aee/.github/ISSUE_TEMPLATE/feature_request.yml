@@ -1,0 +1,51 @@
+name: Feature request
+description: Suggest a feature or behavior for the AetherPlayer app
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        AetherPlayer is a deliberately small, one-window macOS media player. Feature requests here are about the app shell: the window, controls, track menus, scrubbing, snapshots, keyboard shortcuts, and file handling. Requests about which formats or codecs play, or how they decode, are engine concerns and belong on the [AetherEngine tracker](https://github.com/superuser404notfound/AetherEngine/issues).
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What should the app do?
+      description: One or two sentences.
+      placeholder: "Remember the last playback position per file and offer to resume on reopen."
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation / use case
+      description: The workflow or situation that needs this.
+      placeholder: "I watch long files across sessions and have to scrub back to where I left off every time."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Playback controls / scrubbing
+        - Track selection (audio / subtitle)
+        - Snapshots / frame export
+        - Keyboard shortcuts
+        - Window / file handling
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: pr
+    attributes:
+      label: Would you be willing to open a PR?
+      options:
+        - "Yes"
+        - "Maybe, with guidance"
+        - "No"
+    validations:
+      required: true

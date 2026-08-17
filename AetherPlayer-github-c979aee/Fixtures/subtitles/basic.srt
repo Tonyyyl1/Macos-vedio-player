@@ -1,0 +1,7 @@
+1
+00:00:00,000 --> 00:00:00,750
+AetherPlayer fixture subtitle
+
+2
+00:00:00,900 --> 00:00:01,750
+Subtitle timing stays local and deterministic.

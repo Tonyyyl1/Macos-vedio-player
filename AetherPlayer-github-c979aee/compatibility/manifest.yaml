@@ -1,0 +1,133 @@
+version: 1
+description: >-
+  macOS local-playback fixture matrix. Entries marked ready must pass
+  Scripts/verify-fixtures.rb before a change is accepted.
+
+fixtures:
+  - id: mp4-h264-aac
+    status: ready
+    file: mp4/h264-aac.mp4
+    container: mp4
+    videoCodec: h264
+    audioCodec: aac
+    expectedRoute: engine-default
+    expectedDynamicRange: sdr
+    expectedSeekable: true
+    runtimeChecks: [open, first-frame, clock-advances, seek, stop, end]
+
+  - id: mov-h264-aac
+    status: ready
+    file: mov/h264-aac.mov
+    container: mov
+    videoCodec: h264
+    audioCodec: aac
+    expectedRoute: engine-default
+    expectedDynamicRange: sdr
+    expectedSeekable: true
+    runtimeChecks: [open, first-frame, clock-advances, seek, stop, end]
+
+  - id: mkv-h264-aac-srt
+    status: ready
+    file: mkv/h264-aac-srt.mkv
+    container: mkv
+    videoCodec: h264
+    audioCodec: aac
+    subtitleCodec: subrip
+    engineSubtitleCodec: srt
+    expectedRoute: engine-default
+    expectedDynamicRange: sdr
+    expectedSeekable: true
+    runtimeChecks: [open, first-frame, clock-advances, seek, audio, subtitle, stop, end]
+
+  - id: mkv-hevc-main10-aac
+    status: ready
+    file: mkv/hevc-main10-aac.mkv
+    container: mkv
+    videoCodec: hevc
+    videoProfile: Main 10
+    audioCodec: aac
+    expectedRoute: engine-default
+    expectedDynamicRange: sdr
+    expectedSeekable: true
+    runtimeChecks: [open, first-frame, clock-advances, seek, stop, end]
+
+  - id: webm-vp9-opus
+    status: ready
+    file: webm/vp9-opus.webm
+    container: webm
+    videoCodec: vp9
+    videoProfile: Profile 0
+    audioCodec: opus
+    expectedRoute: engine-default
+    expectedDynamicRange: sdr
+    expectedSeekable: true
+    # The software first-frame decode budget is deliberately generous for CI;
+    # its measured value is reported by FixtureProbeTests.
+    firstFrameDecodeBudgetSeconds: 3.0
+    runtimeChecks: [open, route, first-frame, clock-advances, seek, stop, end]
+
+  - id: webm-av1-opus
+    status: ready
+    file: webm/av1-opus.webm
+    container: webm
+    videoCodec: av1
+    videoProfile: Main
+    audioCodec: opus
+    # AV1 uses the native path where VideoToolbox hardware decode is available
+    # and AetherEngine's dav1d software path otherwise. The integration test
+    # reports the selected backend in its failure diagnostics.
+    expectedRoute: engine-av1-capability
+    expectedDynamicRange: sdr
+    expectedSeekable: true
+    # Same CI-friendly first-frame baseline as VP9; the measured duration is
+    # part of the XCTest failure message.
+    firstFrameDecodeBudgetSeconds: 3.0
+    runtimeChecks: [open, route, first-frame, clock-advances, seek, stop, end]
+
+  - id: mkv-hevc-main10-eac3-srt
+    status: ready
+    file: mkv/hevc-main10-eac3-srt.mkv
+    container: mkv
+    videoCodec: hevc
+    videoProfile: Main 10
+    audioCodec: eac3
+    subtitleCodec: subrip
+    engineSubtitleCodec: srt
+    expectedRoute: engine-default
+    expectedDynamicRange: sdr
+    expectedSeekable: true
+    runtimeChecks: [open, first-frame, clock-advances, seek, audio, subtitle, stop, end]
+
+  - id: mkv-vp9-pgs
+    status: ready
+    file: pgs/mkv-vp9-pgs.mkv
+    container: mkv
+    videoCodec: vp9
+    videoProfile: Profile 0
+    subtitleCodec: hdmv_pgs_subtitle
+    engineSubtitleCodec: pgssub
+    expectedRoute: engine-software
+    expectedDynamicRange: sdr
+    expectedSeekable: true
+    runtimeChecks: [open, first-frame, clock-advances, seek, subtitle, stop, end]
+
+  - id: mkv-hevc-main10-hdr10
+    status: ready
+    file: hdr/mkv-hevc-main10-hdr10.mkv
+    container: mkv
+    videoCodec: hevc
+    videoProfile: Main 10
+    videoColorSpace: bt2020nc
+    videoColorTransfer: smpte2084
+    videoColorPrimaries: bt2020
+    expectedRoute: engine-default
+    expectedDynamicRange: hdr10
+    expectedSeekable: true
+    runtimeChecks: [open, source-format, first-frame, clock-advances, seek, stop, end]
+
+  - id: malformed-truncated-mp4
+    status: ready
+    file: malformed/truncated.mp4
+    container: mp4
+    expectedFailure: malformed-input
+    runtimeChecks: [open-fails-once, no-permanent-loading, stop]
