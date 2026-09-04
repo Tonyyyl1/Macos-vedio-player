@@ -1,0 +1,43 @@
+name: Set up pinned XcodeGen
+description: Download and expose the exact XcodeGen release used to generate the project.
+
+inputs:
+  version:
+    description: XcodeGen release version.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install XcodeGen
+      shell: bash
+      env:
+        XCODEGEN_VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+
+        archive="$RUNNER_TEMP/xcodegen.artifactbundle.zip"
+        install_root="$RUNNER_TEMP/xcodegen-$XCODEGEN_VERSION"
+        bin_root="$RUNNER_TEMP/xcodegen-bin"
+
+        curl --fail --location --retry 3 \
+          --output "$archive" \
+          "https://github.com/yonaskolb/XcodeGen/releases/download/$XCODEGEN_VERSION/xcodegen.artifactbundle.zip"
+        mkdir -p "$install_root" "$bin_root"
+        ditto -x -k "$archive" "$install_root"
+
+        source_binary="$(find "$install_root" -type f -name xcodegen -print -quit)"
+        if [ -z "$source_binary" ]; then
+          echo "The XcodeGen artifact bundle did not contain an xcodegen executable." >&2
+          exit 1
+        fi
+
+        install -m 0755 "$source_binary" "$bin_root/xcodegen"
+        actual_version="$("$bin_root/xcodegen" --version | awk '{print $2}')"
+        if [ "$actual_version" != "$XCODEGEN_VERSION" ]; then
+          echo "Expected XcodeGen $XCODEGEN_VERSION, found $actual_version." >&2
+          exit 1
+        fi
+
+        echo "$bin_root" >> "$GITHUB_PATH"
+

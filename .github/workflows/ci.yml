@@ -1,0 +1,203 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to check out and validate.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+  XCODE_VERSION: "26.6"
+  XCODEGEN_VERSION: "2.45.4"
+
+jobs:
+  media-matrix-schema:
+    name: Media matrix schema
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+
+      - name: Validate media matrix JSON and semantics
+        run: |
+          set -euo pipefail
+          python3 -m json.tool Tests/MediaMatrix/schema/media-matrix.schema.json >/dev/null
+          python3 -m json.tool Tests/MediaMatrix/manifest.json >/dev/null
+          python3 Scripts/validate-media-matrix.py
+          python3 -m unittest discover -s Tests/Scripts -p 'test_*.py'
+
+  generated-project:
+    name: Generated project is current
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+
+      - name: Verify pinned Xcode
+        run: |
+          set -euo pipefail
+          actual_version="$(xcodebuild -version | awk 'NR == 1 { print $2 }')"
+          if [ "$actual_version" != "$XCODE_VERSION" ]; then
+            echo "Expected Xcode $XCODE_VERSION, found $actual_version." >&2
+            exit 1
+          fi
+          xcodebuild -version
+
+      - uses: ./.github/actions/setup-xcodegen
+        with:
+          version: ${{ env.XCODEGEN_VERSION }}
+
+      - name: Regenerate Xcode project
+        run: xcodegen generate
+
+      - name: Reject generated project drift
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet -- \
+            AetherPlayer.xcodeproj/project.pbxproj \
+            AetherPlayer.xcodeproj/xcshareddata/xcschemes \
+            Sources/iOS/Resources/Info.plist \
+            Sources/macOS/Resources/Info.plist \
+            Sources/macOS/Resources/Info-MAS.plist; then
+            echo "project.yml and the checked-in generated files differ:" >&2
+            git diff -- \
+              AetherPlayer.xcodeproj/project.pbxproj \
+              AetherPlayer.xcodeproj/xcshareddata/xcschemes \
+              Sources/iOS/Resources/Info.plist \
+              Sources/macOS/Resources/Info.plist \
+              Sources/macOS/Resources/Info-MAS.plist
+            exit 1
+          fi
+
+          untracked="$(git ls-files --others --exclude-standard -- AetherPlayer.xcodeproj)"
+          if [ -n "$untracked" ]; then
+            echo "XcodeGen created untracked project files:" >&2
+            printf '%s\n' "$untracked" >&2
+            exit 1
+          fi
+
+  build-test:
+    name: ${{ matrix.name }}
+    needs:
+      - generated-project
+      - media-matrix-schema
+    runs-on: macos-26
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: direct-tests
+            name: macOS direct tests
+            scheme: AetherPlayer
+            destination: platform=macOS,arch=arm64
+            action: test
+          - id: direct-build
+            name: macOS direct build
+            scheme: AetherPlayer
+            destination: platform=macOS,arch=arm64
+            action: build
+          - id: mas-build
+            name: macOS MAS build
+            scheme: AetherPlayer-MAS
+            destination: platform=macOS,arch=arm64
+            action: build
+          - id: ios-build
+            name: generic iOS build
+            scheme: AetherPlayer-iOS
+            destination: generic/platform=iOS
+            action: build
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+
+      - name: Verify pinned Xcode
+        run: |
+          set -euo pipefail
+          actual_version="$(xcodebuild -version | awk 'NR == 1 { print $2 }')"
+          if [ "$actual_version" != "$XCODE_VERSION" ]; then
+            echo "Expected Xcode $XCODE_VERSION, found $actual_version." >&2
+            exit 1
+          fi
+          xcodebuild -version
+
+      - name: Restore revision-scoped Swift package cache
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/AetherPlayer-SourcePackages
+          key: swiftpm-${{ runner.os }}-${{ runner.arch }}-xcode-${{ env.XCODE_VERSION }}-${{ hashFiles('project.yml', 'AetherPlayer.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+
+      - name: Resolve Swift packages
+        run: |
+          set -euo pipefail
+          xcodebuild -resolvePackageDependencies \
+            -project AetherPlayer.xcodeproj \
+            -clonedSourcePackagesDirPath "$HOME/Library/Caches/AetherPlayer-SourcePackages"
+          git diff --exit-code -- \
+            AetherPlayer.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+      - name: Run macOS tests
+        if: matrix.action == 'test'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ci-results"
+          xcodebuild \
+            -project AetherPlayer.xcodeproj \
+            -scheme "${{ matrix.scheme }}" \
+            -configuration Debug \
+            -destination "${{ matrix.destination }}" \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData-${{ matrix.id }}" \
+            -clonedSourcePackagesDirPath "$HOME/Library/Caches/AetherPlayer-SourcePackages" \
+            -resultBundlePath "$RUNNER_TEMP/ci-results/${{ matrix.id }}.xcresult" \
+            -parallel-testing-enabled NO \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            ARCHS=arm64 \
+            ONLY_ACTIVE_ARCH=YES \
+            test
+
+      - name: Build unsigned target
+        if: matrix.action == 'build'
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/ci-results"
+          xcodebuild \
+            -project AetherPlayer.xcodeproj \
+            -scheme "${{ matrix.scheme }}" \
+            -configuration Debug \
+            -destination "${{ matrix.destination }}" \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData-${{ matrix.id }}" \
+            -clonedSourcePackagesDirPath "$HOME/Library/Caches/AetherPlayer-SourcePackages" \
+            -resultBundlePath "$RUNNER_TEMP/ci-results/${{ matrix.id }}.xcresult" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            ARCHS=arm64 \
+            ONLY_ACTIVE_ARCH=YES \
+            build
+
+      - name: Upload failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-failure-${{ matrix.id }}
+          path: |
+            ${{ runner.temp }}/ci-results
+            ${{ runner.temp }}/DerivedData-${{ matrix.id }}/Logs
+          if-no-files-found: warn
+          retention-days: 14

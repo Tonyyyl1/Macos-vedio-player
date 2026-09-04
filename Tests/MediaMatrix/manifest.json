@@ -1,0 +1,2001 @@
+{
+  "schema_version": "1.0.0",
+  "matrix_id": "aetherplayer-media-matrix-v1",
+  "toolchain": {
+    "ffmpeg": {
+      "required_version": "8.1.2",
+      "source_url": "https://ffmpeg.org/releases/ffmpeg-8.1.2.tar.xz",
+      "detected_version": "8.1.2"
+    },
+    "ffprobe": {
+      "required_version": "8.1.2",
+      "source_url": "https://ffmpeg.org/releases/ffmpeg-8.1.2.tar.xz",
+      "detected_version": "8.1.2"
+    }
+  },
+  "smoke_fixture_ids": [
+    "gen-h264-8bit-420-709-limited-mp4-v2",
+    "gen-hevc-main10-420-2020-pq-limited-mkv-v2",
+    "gen-mpeg2-8bit-420-470bg-limited-interlaced-bff-ts-v1",
+    "gen-ffv1-10bit-444-709-full-mkv-v1"
+  ],
+  "fixtures": [
+    {
+      "id": "gen-h264-8bit-420-709-limited-mp4-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-h264-8bit-420-709-limited-mp4-v1.mp4",
+        "sha256": "13a91a48c7b5d5e57d6bdaeb9c3f338062f50a7392ebb9875dfdd5bdc5932ce1",
+        "size_bytes": 189094
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 and sine sources authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=24:duration=4",
+          "-f",
+          "lavfi",
+          "-i",
+          "sine=frequency=1000:sample_rate=48000:duration=4",
+          "-c:v",
+          "libx264",
+          "-profile:v",
+          "high",
+          "-level:v",
+          "3.1",
+          "-pix_fmt",
+          "yuv420p",
+          "-color_range",
+          "tv",
+          "-color_primaries",
+          "bt709",
+          "-color_trc",
+          "bt709",
+          "-colorspace",
+          "bt709",
+          "-g",
+          "48",
+          "-bf",
+          "2",
+          "-c:a",
+          "aac",
+          "-b:a",
+          "128k",
+          "-shortest",
+          "-movflags",
+          "+faststart",
+          "{output}"
+        ]
+      },
+      "container": "mp4",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "h264",
+          "profile": "high",
+          "level": "3.1",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p",
+          "range": "limited",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt709",
+          "chroma_location": "left",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": 48,
+            "max_reorder_frames": 2
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1
+        },
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "capability_decision",
+        "decoder": "decision_pending",
+        "fallback_eligibility": "decision_pending",
+        "oracles": {
+          "visual": "testsrc2 geometry and color bars remain visible without clipping",
+          "audio": "1 kHz tone is audible for the full four seconds",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-h264-8bit-420-709-limited-mp4-v1.ffprobe.json",
+        "sha256": "b991eb618cee62b52a4332bf797a9a7ea65a0d527e260eca093a46fe9fe77b07"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-h264-hi10p-420-709-limited-mkv-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-h264-hi10p-420-709-limited-mkv-v1.mkv",
+        "sha256": "7fe5253fc0b08842e2b1ac85f63543c219e1edc7cb1a567587384b5ec0c16155",
+        "size_bytes": 122422
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=24:duration=4",
+          "-c:v",
+          "libx264",
+          "-profile:v",
+          "high10",
+          "-level:v",
+          "3.1",
+          "-pix_fmt",
+          "yuv420p10le",
+          "-color_range",
+          "tv",
+          "-color_primaries",
+          "bt709",
+          "-color_trc",
+          "bt709",
+          "-colorspace",
+          "bt709",
+          "-g",
+          "48",
+          "-bf",
+          "4",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "matroska",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "h264",
+          "profile": "high10",
+          "level": "3.1",
+          "bit_depth": 10,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p10le",
+          "range": "limited",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt709",
+          "chroma_location": "left",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": 48,
+            "max_reorder_frames": 4
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "software",
+        "decoder": "software",
+        "fallback_eligibility": "not_applicable",
+        "oracles": {
+          "visual": "10-bit gradient and test pattern decode without band truncation",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-h264-hi10p-420-709-limited-mkv-v1.ffprobe.json",
+        "sha256": "e1db4e124e18834d632f8572eb241e7191fc64976d7154d6ecbeca559be89ce5"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-hevc-main10-420-2020-pq-limited-mkv-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-hevc-main10-420-2020-pq-limited-mkv-v1.mkv",
+        "sha256": "9abff34cf0242ffa4640920af36f74054f1d43a32166fcb7050b54a339007d3e",
+        "size_bytes": 133926
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=24:duration=4",
+          "-vf",
+          "format=yuv420p10le",
+          "-c:v",
+          "libx265",
+          "-profile:v",
+          "main10",
+          "-level:v",
+          "4.0",
+          "-pix_fmt",
+          "yuv420p10le",
+          "-color_range",
+          "tv",
+          "-color_primaries",
+          "bt2020",
+          "-color_trc",
+          "smpte2084",
+          "-colorspace",
+          "bt2020nc",
+          "-x265-params",
+          "hdr-opt=1:repeat-headers=1:colorprim=bt2020:transfer=smpte2084:colormatrix=bt2020nc:master-display=G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,1):max-cll=1000,400",
+          "-g",
+          "48",
+          "-bf",
+          "4",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "matroska",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "hevc",
+          "profile": "main10",
+          "level": "4.0",
+          "bit_depth": 10,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p10le",
+          "range": "limited",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt2020nc",
+          "chroma_location": "left",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": 48,
+            "max_reorder_frames": 4
+          },
+          "hdr": {
+            "kind": "unknown",
+            "dolby_vision_profile": null,
+            "mastering_display": "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,1)",
+            "max_cll": 1000,
+            "max_fall": 400
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "capability_decision",
+        "decoder": "decision_pending",
+        "fallback_eligibility": "decision_pending",
+        "oracles": {
+          "visual": "PQ/BT.2020 metadata and 10-bit pixels remain internally consistent",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-hevc-main10-420-2020-pq-limited-mkv-v1.ffprobe.json",
+        "sha256": "60672f5918537a5ab07df2210efefeb260b4e2b5a9a6ecec074e9bda0131fdd0"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-vp9-8bit-420-709-full-webm-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-vp9-8bit-420-709-full-webm-v1.webm",
+        "sha256": "4694d04c163dbaec815ae9374adf1d4d200ee50c3de15bb654bc8681dfacec8a",
+        "size_bytes": 169628
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=30:duration=4",
+          "-c:v",
+          "libvpx-vp9",
+          "-deadline",
+          "good",
+          "-cpu-used",
+          "2",
+          "-pix_fmt",
+          "yuv420p",
+          "-color_range",
+          "pc",
+          "-color_primaries",
+          "bt709",
+          "-color_trc",
+          "bt709",
+          "-colorspace",
+          "bt709",
+          "-g",
+          "60",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "webm",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "vp9",
+          "profile": "profile0",
+          "level": "not_applicable",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p",
+          "range": "full",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt709",
+          "chroma_location": "unknown",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "30/1"
+          },
+          "gop": {
+            "size": 60,
+            "max_reorder_frames": 0
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "software",
+        "decoder": "decision_pending",
+        "fallback_eligibility": "not_applicable",
+        "oracles": {
+          "visual": "full-range black and white code values are not clipped or relabeled as limited",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-vp9-8bit-420-709-full-webm-v1.ffprobe.json",
+        "sha256": "4b77f1c22b95c2c5c28a4b99f29c671071ad78cd5d774c44dcdfbb179631aa72"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-vp9-8bit-420-709-full-webm-v2",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-vp9-8bit-420-709-full-webm-v2.webm",
+        "sha256": "22c08f785a07c9d7bacfe8e079b4886e10efbf133d8d90c7edd4610faa5e69dd",
+        "size_bytes": 169637
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=30:duration=4",
+          "-vf",
+          "setsar=16/15",
+          "-c:v",
+          "libvpx-vp9",
+          "-deadline",
+          "good",
+          "-cpu-used",
+          "2",
+          "-pix_fmt",
+          "yuv420p",
+          "-color_range",
+          "pc",
+          "-color_primaries",
+          "bt709",
+          "-color_trc",
+          "bt709",
+          "-colorspace",
+          "bt709",
+          "-g",
+          "60",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "webm",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "vp9",
+          "profile": "profile0",
+          "level": "not_applicable",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p",
+          "range": "full",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt709",
+          "chroma_location": "unknown",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "30/1"
+          },
+          "gop": {
+            "size": 60,
+            "max_reorder_frames": 0
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "software",
+        "decoder": "software",
+        "fallback_eligibility": "not_applicable",
+        "oracles": {
+          "visual": "full-range code values and the probe-visible non-square pixel aspect ratio remain attached to decoded output",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-vp9-8bit-420-709-full-webm-v2.ffprobe.json",
+        "sha256": "b9a701f52609afd416e78a2963075b1e1f12b0d2f9269769069c4d98448291c4"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-vp9-12bit-420-709-limited-webm-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-vp9-12bit-420-709-limited-webm-v1.webm",
+        "sha256": "f4ed2fab34907f49ba31069b7626b3325922d81b43bc4385e6e8bd9a1622873d",
+        "size_bytes": 114255
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=24:duration=3",
+          "-vf",
+          "format=yuv420p12le",
+          "-c:v",
+          "libvpx-vp9",
+          "-profile:v",
+          "2",
+          "-pix_fmt",
+          "yuv420p12le",
+          "-row-mt",
+          "1",
+          "-deadline",
+          "good",
+          "-cpu-used",
+          "4",
+          "-crf",
+          "30",
+          "-b:v",
+          "0",
+          "-color_range",
+          "tv",
+          "-color_primaries",
+          "bt709",
+          "-color_trc",
+          "bt709",
+          "-colorspace",
+          "bt709",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "webm",
+      "duration_seconds": 3.0,
+      "streams": {
+        "video": {
+          "codec": "vp9",
+          "profile": "profile 2",
+          "level": "not_applicable",
+          "bit_depth": 12,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p12le",
+          "range": "limited",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt709",
+          "chroma_location": "unknown",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": "encoder_default",
+            "max_reorder_frames": "encoder_default"
+          },
+          "hdr": {
+            "kind": "unknown",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "unsupported",
+        "decoder": "unsupported",
+        "fallback_eligibility": "not_applicable",
+        "oracles": {
+          "visual": "Explicit 12-bit unsupported decision; no silent 12-to-8/10 conversion",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-vp9-12bit-420-709-limited-webm-v1.ffprobe.json",
+        "sha256": "219818f7a44c32f41f6d0a354e5d220a816698b71370469a6b53016bacc05c7e"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-mpeg2-8bit-420-601-limited-interlaced-ts-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-mpeg2-8bit-420-601-limited-interlaced-ts-v1.ts",
+        "sha256": "69c79a315e16c41a5afaad86bd084c6adf8ea4f056317bd80e1d205cf9300f8a",
+        "size_bytes": 623596
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=720x480:rate=30000/1001:duration=4",
+          "-vf",
+          "setfield=tff",
+          "-c:v",
+          "mpeg2video",
+          "-flags",
+          "+ildct+ilme",
+          "-top",
+          "1",
+          "-pix_fmt",
+          "yuv420p",
+          "-color_range",
+          "tv",
+          "-color_primaries",
+          "smpte170m",
+          "-color_trc",
+          "smpte170m",
+          "-colorspace",
+          "smpte170m",
+          "-g",
+          "15",
+          "-bf",
+          "2",
+          "-an",
+          "-f",
+          "mpegts",
+          "{output}"
+        ]
+      },
+      "container": "mpegts",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "mpeg2video",
+          "profile": "main",
+          "level": "main",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p",
+          "range": "limited",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "smpte170m",
+          "chroma_location": "left",
+          "scan": "interlaced_tff",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "30000/1001"
+          },
+          "gop": {
+            "size": 15,
+            "max_reorder_frames": 2
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "software",
+        "decoder": "software",
+        "fallback_eligibility": "not_applicable",
+        "oracles": {
+          "visual": "BT.601 matrix, field order, and limited-range levels remain correct",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-mpeg2-8bit-420-601-limited-interlaced-ts-v1.ffprobe.json",
+        "sha256": "2cde06551b589183be589be77c53c738fc9c793e03f415122532c7c540401209"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-ffv1-10bit-444-709-full-mkv-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-ffv1-10bit-444-709-full-mkv-v1.mkv",
+        "sha256": "61f51bba2c1f44d2849a334f5bc9c67e95d847b78cabd42397724646d8458b15",
+        "size_bytes": 683094
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=24:duration=3",
+          "-vf",
+          "format=yuv444p10le",
+          "-c:v",
+          "ffv1",
+          "-level",
+          "3",
+          "-pix_fmt",
+          "yuv444p10le",
+          "-color_range",
+          "pc",
+          "-color_primaries",
+          "bt709",
+          "-color_trc",
+          "bt709",
+          "-colorspace",
+          "bt709",
+          "-g",
+          "1",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "matroska",
+      "duration_seconds": 3.0,
+      "streams": {
+        "video": {
+          "codec": "ffv1",
+          "profile": "unknown",
+          "level": "3",
+          "bit_depth": 10,
+          "chroma_subsampling": "4:4:4",
+          "pixel_format": "yuv444p10le",
+          "range": "full",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt709",
+          "chroma_location": "unknown",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": 1,
+            "max_reorder_frames": 0
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "software",
+        "decoder": "software",
+        "fallback_eligibility": "not_applicable",
+        "oracles": {
+          "visual": "10-bit 4:4:4 full-range pixels survive decode without chroma loss",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-ffv1-10bit-444-709-full-mkv-v1.ffprobe.json",
+        "sha256": "904599e0947433a68dac781c41b10a28bd9ac2aaf59cfce7e25c50b4ef251ec7"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-prores-10bit-422-709-limited-mov-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-prores-10bit-422-709-limited-mov-v1.mov",
+        "sha256": "17f53da1d6282968a80e1f1c1144edf0df9884e7c6b5af0ea361eac7f843386e",
+        "size_bytes": 1596457
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=24:duration=3",
+          "-c:v",
+          "prores_ks",
+          "-profile:v",
+          "2",
+          "-pix_fmt",
+          "yuv422p10le",
+          "-color_range",
+          "tv",
+          "-color_primaries",
+          "bt709",
+          "-color_trc",
+          "bt709",
+          "-colorspace",
+          "bt709",
+          "-vendor",
+          "apl0",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "mov",
+      "duration_seconds": 3.0,
+      "streams": {
+        "video": {
+          "codec": "prores",
+          "profile": "standard",
+          "level": "not_applicable",
+          "bit_depth": 10,
+          "chroma_subsampling": "4:2:2",
+          "pixel_format": "yuv422p10le",
+          "range": "limited",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt709",
+          "chroma_location": "unknown",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": 1,
+            "max_reorder_frames": 0
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "capability_decision",
+        "decoder": "decision_pending",
+        "fallback_eligibility": "decision_pending",
+        "oracles": {
+          "visual": "4:2:2 chroma and 10-bit precision remain diagnosable",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-prores-10bit-422-709-limited-mov-v1.ffprobe.json",
+        "sha256": "4664dad9ca57ae66279c80359a5b83a5a19eed0e2caec343150687726fa4588c"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-mjpeg-8bit-422-601-full-avi-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-mjpeg-8bit-422-601-full-avi-v1.avi",
+        "sha256": "bc403d74d98f3133b6c07c184996459dc70a7fda0d4c839ab1fc519792f6c0a1",
+        "size_bytes": 1021714
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x240:rate=24:duration=3",
+          "-c:v",
+          "mjpeg",
+          "-q:v",
+          "3",
+          "-pix_fmt",
+          "yuvj422p",
+          "-color_range",
+          "pc",
+          "-color_primaries",
+          "smpte170m",
+          "-color_trc",
+          "smpte170m",
+          "-colorspace",
+          "smpte170m",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "avi",
+      "duration_seconds": 3.0,
+      "streams": {
+        "video": {
+          "codec": "mjpeg",
+          "profile": "baseline",
+          "level": "not_applicable",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:2",
+          "pixel_format": "yuvj422p",
+          "range": "full",
+          "primaries": "unknown",
+          "transfer": "unknown",
+          "matrix": "bt470bg",
+          "chroma_location": "center",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": 1,
+            "max_reorder_frames": 0
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "capability_decision",
+        "decoder": "decision_pending",
+        "fallback_eligibility": "decision_pending",
+        "oracles": {
+          "visual": "full-range BT.601 levels and 4:2:2 chroma are preserved",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-mjpeg-8bit-422-601-full-avi-v1.ffprobe.json",
+        "sha256": "6d5b1938ef050df0562df0ab93cf74db8844cff0bc6597f5f16e92705b64455c"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-h264-8bit-420-709-limited-mp4-v2",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-h264-8bit-420-709-limited-mp4-v2.mp4",
+        "sha256": "5d8665e17f1c554b9ec3dd6b90209e13af4a8c87311a0156ed971af7f99e4d89",
+        "size_bytes": 189095
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "Deterministic H.264 VUI correction of gen-h264-8bit-420-709-limited-mp4-v1",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-i",
+          "fixtures/gen-h264-8bit-420-709-limited-mp4-v1.mp4",
+          "-map",
+          "0",
+          "-c",
+          "copy",
+          "-bsf:v",
+          "h264_metadata=video_full_range_flag=0:colour_primaries=1:transfer_characteristics=1:matrix_coefficients=1:chroma_sample_loc_type=0",
+          "{output}"
+        ]
+      },
+      "container": "mp4",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "h264",
+          "profile": "high",
+          "level": "3.1",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p",
+          "range": "limited",
+          "primaries": "bt709",
+          "transfer": "bt709",
+          "matrix": "bt709",
+          "chroma_location": "left",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": 48,
+            "max_reorder_frames": 2
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": {
+          "codec": "aac",
+          "sample_rate": 48000,
+          "channels": 1
+        },
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "capability_decision",
+        "decoder": "decision_pending",
+        "fallback_eligibility": "decision_pending",
+        "oracles": {
+          "visual": "BT.709 VUI triplet and limited range are probe-visible",
+          "audio": "1 kHz tone remains bitstream-copied",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-h264-8bit-420-709-limited-mp4-v2.ffprobe.json",
+        "sha256": "6fbdd81c4cd3a258ab8d3dc7bb3719eb8bccc199a9be7910ff06900b05179e73"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-hevc-main10-420-2020-pq-limited-mkv-v2",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-hevc-main10-420-2020-pq-limited-mkv-v2.mkv",
+        "sha256": "0607059ca4579b904e34050591410005a89dfc4de06c0723fb3fe09824104e40",
+        "size_bytes": 137919
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 source authored by this project with explicit frame and HEVC VUI metadata",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=24:duration=4",
+          "-vf",
+          "format=yuv420p10le,setparams=range=limited:color_primaries=bt2020:color_trc=smpte2084:colorspace=bt2020nc:chroma_location=left",
+          "-c:v",
+          "libx265",
+          "-profile:v",
+          "main10",
+          "-level:v",
+          "4.0",
+          "-pix_fmt",
+          "yuv420p10le",
+          "-x265-params",
+          "hdr-opt=1:repeat-headers=1:colorprim=bt2020:transfer=smpte2084:colormatrix=bt2020nc:master-display=G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,1):max-cll=1000,400",
+          "-g",
+          "48",
+          "-bf",
+          "4",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "matroska",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "hevc",
+          "profile": "main10",
+          "level": "4.0",
+          "bit_depth": 10,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p10le",
+          "range": "limited",
+          "primaries": "bt2020",
+          "transfer": "smpte2084",
+          "matrix": "bt2020nc",
+          "chroma_location": "left",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "24/1"
+          },
+          "gop": {
+            "size": 48,
+            "max_reorder_frames": 4
+          },
+          "hdr": {
+            "kind": "hdr10",
+            "dolby_vision_profile": null,
+            "mastering_display": "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,1)",
+            "max_cll": 1000,
+            "max_fall": 400
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "capability_decision",
+        "decoder": "decision_pending",
+        "fallback_eligibility": "decision_pending",
+        "oracles": {
+          "visual": "BT.2020/PQ VUI and HDR10 mastering metadata remain consistent",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-hevc-main10-420-2020-pq-limited-mkv-v2.ffprobe.json",
+        "sha256": "9aa7976b395265e482741daf86df0594112ac239883f803c79ac182ad50fa87b"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-mpeg2-8bit-420-170m-limited-interlaced-tff-ts-v2",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-mpeg2-8bit-420-170m-limited-interlaced-tff-ts-v2.ts",
+        "sha256": "f923c72ba2738f26dd2e1334a6e92dce5233c44d3de22bb6034d40546b5f99db",
+        "size_bytes": 623596
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "Deterministic MPEG-2 VUI correction of gen-mpeg2-8bit-420-601-limited-interlaced-ts-v1",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-i",
+          "fixtures/gen-mpeg2-8bit-420-601-limited-interlaced-ts-v1.ts",
+          "-map",
+          "0",
+          "-c",
+          "copy",
+          "-bsf:v",
+          "mpeg2_metadata=video_format=5:colour_primaries=6:transfer_characteristics=6:matrix_coefficients=6",
+          "-f",
+          "mpegts",
+          "{output}"
+        ]
+      },
+      "container": "mpegts",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "mpeg2video",
+          "profile": "main",
+          "level": "main",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p",
+          "range": "limited",
+          "primaries": "smpte170m",
+          "transfer": "smpte170m",
+          "matrix": "smpte170m",
+          "chroma_location": "left",
+          "scan": "interlaced_tff",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "30000/1001"
+          },
+          "gop": {
+            "size": 15,
+            "max_reorder_frames": 2
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "software",
+        "decoder": "software",
+        "fallback_eligibility": "not_applicable",
+        "oracles": {
+          "visual": "SMPTE 170M triplet, limited range, and TFF order are probe-visible",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-mpeg2-8bit-420-170m-limited-interlaced-tff-ts-v2.ffprobe.json",
+        "sha256": "f768cb5e4a5a39620db2a3e434d6a49b213ed74c1d52a699ce8ca9459cba63f1"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-mpeg2-8bit-420-470bg-limited-interlaced-bff-ts-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-mpeg2-8bit-420-470bg-limited-interlaced-bff-ts-v1.ts",
+        "sha256": "d972108443608acb7f4113f11ab168e45dd73942d328d6f2e20f41020c979d01",
+        "size_bytes": 726432
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi PAL testsrc2 source authored by this project",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=720x576:rate=25:duration=4",
+          "-vf",
+          "setfield=bff,setparams=range=limited:color_primaries=bt470bg:color_trc=bt470bg:colorspace=bt470bg:chroma_location=left",
+          "-c:v",
+          "mpeg2video",
+          "-flags",
+          "+ildct+ilme",
+          "-pix_fmt",
+          "yuv420p",
+          "-g",
+          "15",
+          "-bf",
+          "2",
+          "-an",
+          "-f",
+          "mpegts",
+          "{output}"
+        ]
+      },
+      "container": "mpegts",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "mpeg2video",
+          "profile": "main",
+          "level": "main",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p",
+          "range": "limited",
+          "primaries": "bt470bg",
+          "transfer": "bt470bg",
+          "matrix": "bt470bg",
+          "chroma_location": "left",
+          "scan": "interlaced_bff",
+          "frame_rate": {
+            "mode": "cfr",
+            "average": "25/1"
+          },
+          "gop": {
+            "size": 15,
+            "max_reorder_frames": 2
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "software",
+        "decoder": "software",
+        "fallback_eligibility": "not_applicable",
+        "oracles": {
+          "visual": "BT.470BG triplet, limited range, and BFF order are probe-visible",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-mpeg2-8bit-420-470bg-limited-interlaced-bff-ts-v1.ffprobe.json",
+        "sha256": "e2deeb6c9ce8a5aa3dfd1418f8b3e8dee7f74bc3b06684779194c2d89ecdbf85"
+      },
+      "actual": null,
+      "gap": null
+    },
+    {
+      "id": "gen-h264-8bit-420-709-limited-vfr-b6-mkv-v1",
+      "availability": "available",
+      "artifact": {
+        "path": "fixtures/gen-h264-8bit-420-709-limited-vfr-b6-mkv-v1.mkv",
+        "sha256": "2534753816cf12c772f4e2381ff88a3d42d8b9b70c00c7f6ffcefa85a06f006c",
+        "size_bytes": 122964
+      },
+      "provenance": {
+        "kind": "generated",
+        "source": "FFmpeg lavfi testsrc2 authored by this project; deterministic frame selection creates periodic VFR gaps",
+        "license": "CC0-1.0",
+        "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "authorization": "Project-authored synthetic fixture; redistribution permitted"
+      },
+      "generation": {
+        "ffmpeg_version": "8.1.2",
+        "command": [
+          "ffmpeg",
+          "-hide_banner",
+          "-nostdin",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "testsrc2=size=320x180:rate=30:duration=4",
+          "-vf",
+          "select='not(eq(mod(n,10),0))',setparams=range=limited:color_primaries=bt709:color_trc=bt709:colorspace=bt709",
+          "-fps_mode",
+          "vfr",
+          "-c:v",
+          "libx264",
+          "-profile:v",
+          "high",
+          "-level:v",
+          "4.0",
+          "-pix_fmt",
+          "yuv420p",
+          "-color_range",
+          "tv",
+          "-color_primaries",
+          "bt709",
+          "-color_trc",
+          "bt709",
+          "-colorspace",
+          "bt709",
+          "-chroma_sample_location",
+          "left",
+          "-g",
+          "120",
+          "-bf",
+          "6",
+          "-x264-params",
+          "b-adapt=0:scenecut=0:keyint=120:min-keyint=120",
+          "-an",
+          "{output}"
+        ]
+      },
+      "container": "matroska",
+      "duration_seconds": 4.0,
+      "streams": {
+        "video": {
+          "codec": "h264",
+          "profile": "high",
+          "level": "4",
+          "bit_depth": 8,
+          "chroma_subsampling": "4:2:0",
+          "pixel_format": "yuv420p",
+          "range": "limited",
+          "primaries": "bt709",
+          "transfer": "bt709",
+          "matrix": "bt709",
+          "chroma_location": "left",
+          "scan": "progressive",
+          "frame_rate": {
+            "mode": "vfr",
+            "average": "30/1"
+          },
+          "gop": {
+            "size": 120,
+            "max_reorder_frames": 2
+          },
+          "hdr": {
+            "kind": "sdr",
+            "dolby_vision_profile": null,
+            "mastering_display": null,
+            "max_cll": null,
+            "max_fall": null
+          }
+        },
+        "audio": null,
+        "subtitles": []
+      },
+      "expectation": {
+        "route": "capability_decision",
+        "decoder": "decision_pending",
+        "fallback_eligibility": "decision_pending",
+        "oracles": {
+          "visual": "Periodic 67 ms PTS gaps and six consecutive B-frames are probe-visible; displayed PTS must remain monotonic",
+          "audio": "No audio stream is expected",
+          "subtitle": "No subtitle stream is expected"
+        }
+      },
+      "probe": {
+        "path": "probes/gen-h264-8bit-420-709-limited-vfr-b6-mkv-v1.ffprobe.json",
+        "sha256": "8da569596e08a3bb7d5b13bdb24bc16c428b826e25323440e144a5ae442fb2eb"
+      },
+      "actual": null,
+      "gap": null
+    }
+  ],
+  "coverage": [
+    {
+      "id": "codec-h264-8bit",
+      "dimension": "codec",
+      "values": [
+        "h264",
+        "8-bit",
+        "4:2:0"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-h264-8bit-420-709-limited-mp4-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "codec-hevc-8bit",
+      "dimension": "codec",
+      "values": [
+        "hevc",
+        "8-bit",
+        "4:2:0"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Generation recipe still needs to be added"
+    },
+    {
+      "id": "codec-hevc-10bit",
+      "dimension": "codec",
+      "values": [
+        "hevc",
+        "main10",
+        "4:2:0"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-hevc-main10-420-2020-pq-limited-mkv-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "codec-h264-hi10p",
+      "dimension": "codec",
+      "values": [
+        "h264",
+        "high10",
+        "10-bit"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-h264-hi10p-420-709-limited-mkv-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "codec-h264-422",
+      "dimension": "codec",
+      "values": [
+        "h264",
+        "4:2:2"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Generation recipe and encoder capability verification are missing"
+    },
+    {
+      "id": "codec-h264-444",
+      "dimension": "codec",
+      "values": [
+        "h264",
+        "4:4:4"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Generation recipe and encoder capability verification are missing"
+    },
+    {
+      "id": "codec-av1",
+      "dimension": "codec",
+      "values": [
+        "av1",
+        "8-bit",
+        "10-bit"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Pinned AV1 encoder choice and deterministic recipe are not yet selected"
+    },
+    {
+      "id": "codec-vp9",
+      "dimension": "codec",
+      "values": [
+        "vp9",
+        "8-bit",
+        "12-bit"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-vp9-8bit-420-709-full-webm-v1",
+        "gen-vp9-8bit-420-709-full-webm-v2",
+        "gen-vp9-12bit-420-709-limited-webm-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "codec-mpeg2",
+      "dimension": "codec",
+      "values": [
+        "mpeg2video",
+        "interlaced"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-mpeg2-8bit-420-601-limited-interlaced-ts-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "codec-vc1",
+      "dimension": "codec",
+      "values": [
+        "vc1"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "No lawful deterministic encoder is available; needs an authorized external sample and hash"
+    },
+    {
+      "id": "codec-prores",
+      "dimension": "codec",
+      "values": [
+        "prores",
+        "10-bit",
+        "4:2:2"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-prores-10bit-422-709-limited-mov-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "codec-mjpeg",
+      "dimension": "codec",
+      "values": [
+        "mjpeg",
+        "4:2:2"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-mjpeg-8bit-422-601-full-avi-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "codec-dnxhd-hr",
+      "dimension": "codec",
+      "values": [
+        "dnxhd",
+        "dnxhr"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Valid profile/resolution recipes still need to be defined"
+    },
+    {
+      "id": "codec-ffv1",
+      "dimension": "codec",
+      "values": [
+        "ffv1",
+        "10-bit",
+        "4:4:4"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-ffv1-10bit-444-709-full-mkv-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "codec-theora",
+      "dimension": "codec",
+      "values": [
+        "theora"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Generation recipe still needs to be added"
+    },
+    {
+      "id": "container-mp4",
+      "dimension": "container",
+      "values": [
+        "mp4"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-h264-8bit-420-709-limited-mp4-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "container-mov",
+      "dimension": "container",
+      "values": [
+        "mov"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-prores-10bit-422-709-limited-mov-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "container-mkv",
+      "dimension": "container",
+      "values": [
+        "mkv",
+        "matroska"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-h264-hi10p-420-709-limited-mkv-v1",
+        "gen-hevc-main10-420-2020-pq-limited-mkv-v1",
+        "gen-ffv1-10bit-444-709-full-mkv-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "container-ts",
+      "dimension": "container",
+      "values": [
+        "mpegts"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-mpeg2-8bit-420-601-limited-interlaced-ts-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "container-webm",
+      "dimension": "container",
+      "values": [
+        "webm"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-vp9-8bit-420-709-full-webm-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "container-avi",
+      "dimension": "container",
+      "values": [
+        "avi"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-mjpeg-8bit-422-601-full-avi-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "color-bt601",
+      "dimension": "color",
+      "values": [
+        "smpte170m",
+        "bt470bg"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-mpeg2-8bit-420-170m-limited-interlaced-tff-ts-v2",
+        "gen-mpeg2-8bit-420-470bg-limited-interlaced-bff-ts-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "color-bt709",
+      "dimension": "color",
+      "values": [
+        "bt709"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-h264-8bit-420-709-limited-mp4-v2"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "color-bt2020",
+      "dimension": "color",
+      "values": [
+        "bt2020",
+        "smpte2084",
+        "bt2020nc"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-hevc-main10-420-2020-pq-limited-mkv-v2"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "range-limited",
+      "dimension": "range",
+      "values": [
+        "limited"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-h264-8bit-420-709-limited-mp4-v1",
+        "gen-mpeg2-8bit-420-601-limited-interlaced-ts-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "range-full",
+      "dimension": "range",
+      "values": [
+        "full"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-vp9-8bit-420-709-full-webm-v1",
+        "gen-ffv1-10bit-444-709-full-mkv-v1",
+        "gen-mjpeg-8bit-422-601-full-avi-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "timing-cfr",
+      "dimension": "timing",
+      "values": [
+        "cfr"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-h264-8bit-420-709-limited-mp4-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "timing-vfr",
+      "dimension": "timing",
+      "values": [
+        "vfr"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-h264-8bit-420-709-limited-vfr-b6-mkv-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "timing-interlaced",
+      "dimension": "timing",
+      "values": [
+        "interlaced",
+        "tff",
+        "bff"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-mpeg2-8bit-420-170m-limited-interlaced-tff-ts-v2",
+        "gen-mpeg2-8bit-420-470bg-limited-interlaced-bff-ts-v1"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "subtitle-srt",
+      "dimension": "subtitle",
+      "values": [
+        "srt"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Project-authored SRT source exists but muxed fixture recipe is not yet added"
+    },
+    {
+      "id": "subtitle-ass",
+      "dimension": "subtitle",
+      "values": [
+        "ass",
+        "ssa"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Project-authored ASS source exists but muxed fixture recipe is not yet added"
+    },
+    {
+      "id": "subtitle-pgs",
+      "dimension": "subtitle",
+      "values": [
+        "pgs",
+        "bitmap"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Requires a lawful authorized external PGS sample and hash"
+    },
+    {
+      "id": "dynamic-range-hdr10",
+      "dimension": "dynamic_range",
+      "values": [
+        "hdr10",
+        "pq"
+      ],
+      "status": "covered",
+      "fixture_ids": [
+        "gen-hevc-main10-420-2020-pq-limited-mkv-v2"
+      ],
+      "gap_reason": null
+    },
+    {
+      "id": "dynamic-range-hlg",
+      "dimension": "dynamic_range",
+      "values": [
+        "hlg"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "HLG generation recipe is not yet defined"
+    },
+    {
+      "id": "dynamic-range-hdr10plus",
+      "dimension": "dynamic_range",
+      "values": [
+        "hdr10plus"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Requires valid per-frame metadata generation or an authorized sample"
+    },
+    {
+      "id": "dynamic-range-dolby-vision",
+      "dimension": "dynamic_range",
+      "values": [
+        "dv-p5",
+        "dv-p7",
+        "dv-p8.1",
+        "dv-p8.2",
+        "dv-p10.2"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Requires lawful authorized Dolby Vision fixtures and hashes; no media is fabricated"
+    },
+    {
+      "id": "negative-corrupt-drm",
+      "dimension": "negative",
+      "values": [
+        "corrupt",
+        "drm",
+        "truncated"
+      ],
+      "status": "gap",
+      "fixture_ids": [],
+      "gap_reason": "Safe deterministic corrupt/truncated recipes and lawful DRM test source are not yet defined"
+    }
+  ]
+}

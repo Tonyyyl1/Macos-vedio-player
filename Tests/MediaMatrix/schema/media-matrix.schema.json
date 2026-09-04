@@ -1,0 +1,416 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://superuser404notfound.github.io/AetherPlayer/schema/media-matrix-1.0.0.json",
+  "title": "AetherPlayer media compatibility matrix",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "matrix_id",
+    "toolchain",
+    "smoke_fixture_ids",
+    "fixtures",
+    "coverage"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "matrix_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]+$"
+    },
+    "toolchain": {
+      "$ref": "#/$defs/toolchain"
+    },
+    "smoke_fixture_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9._-]+-v[1-9][0-9]*$"
+      }
+    },
+    "fixtures": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fixture"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/coverageRequirement"
+      }
+    }
+  },
+  "$defs": {
+    "nullableString": {
+      "type": ["string", "null"]
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_version", "source_url", "detected_version"],
+      "properties": {
+        "required_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "detected_version": {
+          "$ref": "#/$defs/nullableString"
+        }
+      }
+    },
+    "toolchain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ffmpeg", "ffprobe"],
+      "properties": {
+        "ffmpeg": {
+          "$ref": "#/$defs/tool"
+        },
+        "ffprobe": {
+          "$ref": "#/$defs/tool"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "size_bytes"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^fixtures/[A-Za-z0-9._/-]+$"
+        },
+        "sha256": {
+          "anyOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        },
+        "size_bytes": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        }
+      }
+    },
+    "probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {
+          "type": ["string", "null"],
+          "pattern": "^probes/[A-Za-z0-9._/-]+\\.json$"
+        },
+        "sha256": {
+          "anyOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "source", "license", "license_url", "authorization"],
+      "properties": {
+        "kind": {
+          "enum": ["generated", "external_authorized"]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "license_url": {
+          "type": ["string", "null"]
+        },
+        "authorization": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "generation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["ffmpeg_version", "command"],
+      "properties": {
+        "ffmpeg_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "frameRate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "average"],
+      "properties": {
+        "mode": {
+          "enum": ["cfr", "vfr"]
+        },
+        "average": {
+          "type": "string",
+          "pattern": "^[0-9]+/[1-9][0-9]*$"
+        }
+      }
+    },
+    "gop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["size", "max_reorder_frames"],
+      "properties": {
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_reorder_frames": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "hdr": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "dolby_vision_profile", "mastering_display", "max_cll", "max_fall"],
+      "properties": {
+        "kind": {
+          "enum": ["sdr", "hdr10", "hlg", "hdr10plus", "dolby_vision", "unknown"]
+        },
+        "dolby_vision_profile": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "mastering_display": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "max_cll": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "max_fall": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "codec",
+        "profile",
+        "level",
+        "bit_depth",
+        "chroma_subsampling",
+        "pixel_format",
+        "range",
+        "primaries",
+        "transfer",
+        "matrix",
+        "chroma_location",
+        "scan",
+        "frame_rate",
+        "gop",
+        "hdr"
+      ],
+      "properties": {
+        "codec": {"type": "string", "minLength": 1},
+        "profile": {"type": "string", "minLength": 1},
+        "level": {"type": "string", "minLength": 1},
+        "bit_depth": {"type": "integer", "enum": [8, 9, 10, 12, 16]},
+        "chroma_subsampling": {"enum": ["4:2:0", "4:2:2", "4:4:4", "monochrome"]},
+        "pixel_format": {"type": "string", "minLength": 1},
+        "range": {"enum": ["limited", "full", "unknown"]},
+        "primaries": {"type": "string", "minLength": 1},
+        "transfer": {"type": "string", "minLength": 1},
+        "matrix": {"type": "string", "minLength": 1},
+        "chroma_location": {"type": "string", "minLength": 1},
+        "scan": {"enum": ["progressive", "interlaced_tff", "interlaced_bff"]},
+        "frame_rate": {"$ref": "#/$defs/frameRate"},
+        "gop": {"$ref": "#/$defs/gop"},
+        "hdr": {"$ref": "#/$defs/hdr"}
+      }
+    },
+    "audio": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["codec", "sample_rate", "channels"],
+      "properties": {
+        "codec": {"type": "string", "minLength": 1},
+        "sample_rate": {"type": "integer", "minimum": 8000},
+        "channels": {"type": "integer", "minimum": 1}
+      }
+    },
+    "subtitle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["codec", "kind", "language"],
+      "properties": {
+        "codec": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["text", "ass", "bitmap"]},
+        "language": {"type": "string", "minLength": 2}
+      }
+    },
+    "streams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["video", "audio", "subtitles"],
+      "properties": {
+        "video": {
+          "anyOf": [
+            {"$ref": "#/$defs/video"},
+            {"type": "null"}
+          ]
+        },
+        "audio": {"$ref": "#/$defs/audio"},
+        "subtitles": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/subtitle"}
+        }
+      }
+    },
+    "oracles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["visual", "audio", "subtitle"],
+      "properties": {
+        "visual": {"type": "string", "minLength": 1},
+        "audio": {"type": "string", "minLength": 1},
+        "subtitle": {"type": "string", "minLength": 1}
+      }
+    },
+    "expectation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["route", "decoder", "fallback_eligibility", "oracles"],
+      "properties": {
+        "route": {"enum": ["native", "software", "capability_decision", "unsupported"]},
+        "decoder": {"enum": ["native", "hardware", "software", "decision_pending", "none"]},
+        "fallback_eligibility": {"enum": ["eligible_once", "ineligible", "not_applicable", "decision_pending"]},
+        "oracles": {"$ref": "#/$defs/oracles"}
+      }
+    },
+    "gap": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["reason", "resolution"],
+      "properties": {
+        "reason": {"type": "string", "minLength": 1},
+        "resolution": {"type": "string", "minLength": 1}
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "availability",
+        "artifact",
+        "provenance",
+        "generation",
+        "container",
+        "duration_seconds",
+        "streams",
+        "expectation",
+        "probe",
+        "actual",
+        "gap"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]+-v[1-9][0-9]*$"
+        },
+        "availability": {
+          "enum": ["planned", "available", "external_authorized", "missing_authorized_source"]
+        },
+        "artifact": {"$ref": "#/$defs/artifact"},
+        "provenance": {"$ref": "#/$defs/provenance"},
+        "generation": {"$ref": "#/$defs/generation"},
+        "container": {"type": "string", "minLength": 1},
+        "duration_seconds": {"type": "number", "minimum": 0.1, "maximum": 30},
+        "streams": {"$ref": "#/$defs/streams"},
+        "expectation": {"$ref": "#/$defs/expectation"},
+        "probe": {"$ref": "#/$defs/probe"},
+        "actual": {"type": ["object", "null"]},
+        "gap": {"$ref": "#/$defs/gap"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"availability": {"const": "available"}}
+          },
+          "then": {
+            "properties": {
+              "artifact": {
+                "properties": {
+                  "sha256": {"$ref": "#/$defs/sha256"},
+                  "size_bytes": {"type": "integer", "minimum": 1}
+                }
+              },
+              "probe": {
+                "properties": {
+                  "path": {"type": "string"},
+                  "sha256": {"$ref": "#/$defs/sha256"}
+                }
+              },
+              "gap": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "gap": {"type": "object"}
+            }
+          }
+        }
+      ]
+    },
+    "coverageRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "dimension", "values", "status", "fixture_ids", "gap_reason"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+        "dimension": {"enum": ["codec", "container", "color", "range", "timing", "subtitle", "dynamic_range", "negative"]},
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "status": {"enum": ["covered", "planned", "gap"]},
+        "fixture_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string"}
+        },
+        "gap_reason": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

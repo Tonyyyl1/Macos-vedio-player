@@ -1,0 +1,84 @@
+{
+    "streams": [
+        {
+            "index": 0,
+            "codec_name": "prores",
+            "codec_long_name": "Apple ProRes (iCodec Pro)",
+            "profile": "Standard",
+            "codec_type": "video",
+            "codec_tag_string": "apcn",
+            "codec_tag": "0x6e637061",
+            "width": 320,
+            "height": 180,
+            "coded_width": 320,
+            "coded_height": 180,
+            "has_b_frames": 0,
+            "sample_aspect_ratio": "1:1",
+            "display_aspect_ratio": "16:9",
+            "pix_fmt": "yuv422p10le",
+            "level": -99,
+            "color_range": "tv",
+            "color_space": "bt709",
+            "field_order": "progressive",
+            "id": "0x1",
+            "r_frame_rate": "24/1",
+            "avg_frame_rate": "24/1",
+            "time_base": "1/12288",
+            "start_pts": 0,
+            "start_time": "0.000000",
+            "duration_ts": 36864,
+            "duration": "3.000000",
+            "bit_rate": "4254429",
+            "bits_per_raw_sample": "10",
+            "nb_frames": "72",
+            "disposition": {
+                "default": 1,
+                "dub": 0,
+                "original": 0,
+                "comment": 0,
+                "lyrics": 0,
+                "karaoke": 0,
+                "forced": 0,
+                "hearing_impaired": 0,
+                "visual_impaired": 0,
+                "clean_effects": 0,
+                "attached_pic": 0,
+                "timed_thumbnails": 0,
+                "non_diegetic": 0,
+                "captions": 0,
+                "descriptions": 0,
+                "metadata": 0,
+                "dependent": 0,
+                "still_image": 0,
+                "multilayer": 0
+            },
+            "tags": {
+                "handler_name": "VideoHandler",
+                "vendor_id": "FFMP",
+                "encoder": "Lavc62.28.102 prores_ks"
+            }
+        }
+    ],
+    "chapters": [
+
+    ],
+    "format": {
+        "filename": "/Users/tony/Documents/视频播放器/workspace/active/AetherPlayer/Tests/MediaMatrix/.generation-stage-8emmtoe_/gen-prores-10bit-422-709-limited-mov-v1.mov",
+        "nb_streams": 1,
+        "nb_programs": 0,
+        "nb_stream_groups": 0,
+        "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+        "format_long_name": "QuickTime / MOV",
+        "start_time": "0.000000",
+        "duration": "3.000000",
+        "size": "1596457",
+        "bit_rate": "4257218",
+        "probe_score": 100,
+        "tags": {
+            "major_brand": "qt  ",
+            "minor_version": "512",
+            "compatible_brands": "qt  ",
+            "encoder": "Lavf62.12.102"
+        }
+    }
+}
