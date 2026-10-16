@@ -32,7 +32,11 @@ runs:
           exit 1
         fi
 
-        install -m 0755 "$source_binary" "$bin_root/xcodegen"
+        # SwiftPM's executable needs its adjacent resource bundle for the
+        # default build settings. Copying only the binary silently drops them.
+        ditto "$(dirname "$source_binary")" "$bin_root"
+        chmod 0755 "$bin_root/xcodegen"
+        test -f "$bin_root/XcodeGen_XcodeGenKit.bundle/Contents/Resources/SettingPresets/base.yml"
         actual_version="$("$bin_root/xcodegen" --version | awk '{print $2}')"
         if [ "$actual_version" != "$XCODEGEN_VERSION" ]; then
           echo "Expected XcodeGen $XCODEGEN_VERSION, found $actual_version." >&2

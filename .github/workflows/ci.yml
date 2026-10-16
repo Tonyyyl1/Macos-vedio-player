@@ -117,11 +117,6 @@ jobs:
             scheme: AetherPlayer-MAS
             destination: platform=macOS,arch=arm64
             action: build
-          - id: ios-build
-            name: generic iOS build
-            scheme: AetherPlayer-iOS
-            destination: generic/platform=iOS
-            action: build
     steps:
       - uses: actions/checkout@v6
         with:
